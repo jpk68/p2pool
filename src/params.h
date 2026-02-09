@@ -138,6 +138,10 @@ struct Params
 
 	std::string m_onionAddress;
 	hash m_onionPubkey;
+
+	std::string m_i2pAddress;
+	hash m_i2pPubkey;
+
 	bool m_noClearnetP2P = false;
 };
 

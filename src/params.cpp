@@ -300,6 +300,11 @@ Params::Params(const std::vector<std::vector<std::string>>& args)
 			ok = true;
 		}
 
+		if ((arg[0] == "i2p-address") && has1(arg)) {
+			m_i2pAddress = arg[1];
+			ok = true;
+		}
+
 		if (arg[0] == "no-clearnet-p2p") {
 			m_noClearnetP2P = true;
 			ok = true;
@@ -317,6 +322,15 @@ Params::Params(const std::vector<std::vector<std::string>>& args)
 
 		if (m_onionPubkey.empty()) {
 			LOGERR(1, "Failed to parse \"" << m_onionAddress << '"');
+			throw std::exception();
+		}
+	}
+
+	if (!m_i2pAddress.empty()) {
+		m_i2pPubkey = from_i2p_b32(m_i2pAddress);
+
+		if (m_i2pPubkey.empty()) {
+			LOGERR(1, "Failed to parse \"" << m_i2pAddress << '"');
 			throw std::exception();
 		}
 	}
