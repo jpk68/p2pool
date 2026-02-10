@@ -2,7 +2,8 @@
 
 There are several command-line options that should be used for I2P setup:
 
-- `--socks5 IP:port` to specify your I2P SOCKS proxy address (likely `127.0.0.1:4447` if you followed the guide below.)
+- `--socks5 IP:port` to specify your I2P SOCKS5 proxy address (likely `127.0.0.1:4447` if you followed the guide below.)
+- `--socks5-proxy-type` to specify the type of SOCKS5 proxy being used.
 - `--no-dns` to disable all DNS queries and prevent DNS leaks. P2Pool only ever makes DNS requests to get a list of seed nodes, to resolve your Monero node's domain (if it's not set as an IP address), and to resolve manually added peers
 - `--no-upnp` to disable UPnP requests (they are sent to your router, so use this option if you are not on your home network)
 - `--i2p-address` your hidden service's address (without port number). This address will be broadcast to other peers when you mine a share in P2Pool. This is to prevent address spamming - you have to mine a real share to be able to broadcast your I2P address.
@@ -43,5 +44,5 @@ This will give you the address to use when running P2Pool.
 
 ## Command line example
 ```
-./p2pool --host MONERO_NODE_IP --wallet YOUR_WALLET --socks5 127.0.0.1:9050 --no-dns --no-upnp --i2p-address ADDRESS_FROM_CURL_COMMAND
+./p2pool --host MONERO_NODE_IP --wallet YOUR_WALLET --socks5 127.0.0.1:9050 --socks5-proxy-type i2p --no-dns --no-upnp --i2p-address ADDRESS_FROM_CURL_COMMAND
 ```
