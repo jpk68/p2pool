@@ -116,7 +116,8 @@ struct Params
 		AUTO    =  0,
 		PLAIN   =  1,
 		TOR     =  2,
-		MAX     =  3,
+		I2P     =  3,
+		MAX     =  4,
 	} m_socks5ProxyType = ProxyType::AUTO;
 
 	bool m_dns = true;

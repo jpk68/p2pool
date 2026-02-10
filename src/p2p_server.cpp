@@ -749,7 +749,8 @@ void P2PServer::load_peer_list()
 
 		if (f.is_open()) {
 			std::string address;
-			std::vector<hash> pubkeys;
+			std::vector<hash> onion_pubkeys;
+			std::vector<hash> i2p_pubkeys;
 
 			while (f.good()) {
 				std::getline(f, address);
@@ -758,7 +759,13 @@ void P2PServer::load_peer_list()
 					if (i == Params::ProxyType::TOR) {
 						const hash h = from_onion_v3(address);
 						if (!h.empty()) {
-							pubkeys.emplace_back(h);
+							onion_pubkeys.emplace_back(h);
+						}
+					}
+					if (i == Params::ProxyType::I2P) {
+						const hash h = from_i2p_b32(address);
+						if (!h.empty()) {
+							i2p_pubkeys.emplace_back(h);
 						}
 					}
 					else {
@@ -772,7 +779,10 @@ void P2PServer::load_peer_list()
 			f.close();
 
 			if (i == Params::ProxyType::TOR) {
-				s.add_onion_pubkeys(pubkeys);
+				s.add_onion_pubkeys(onion_pubkeys);
+			}
+			if (i == Params::ProxyType::I2P) {
+				s.add_i2p_pubkeys(i2p_pubkeys);
 			}
 		}
 	}
@@ -3043,7 +3053,7 @@ bool P2PServer::P2PClient::on_aux_job_donation(const uint8_t* buf, uint32_t size
 	const time_t cur_time = time(nullptr);
 
 	// Layout of the message:
-	// 
+	//
 	// 32 bytes           | Secondary public key
 	// 8 bytes            | Secondary public key's expiration timestamp
 	// 64 bytes           | Master key signature signing the above 40 bytes
@@ -3062,11 +3072,11 @@ bool P2PServer::P2PClient::on_aux_job_donation(const uint8_t* buf, uint32_t size
 	}
 
 	// Layout of the data:
-	// 
+	//
 	// 8 bytes  | timestamp
-	// 
+	//
 	// Next come one or multiple data entries:
-	// 
+	//
 	// 32 bytes | aux_id
 	// 32 bytes | aux_hash
 	// 16 bytes | aux_diff
@@ -3262,7 +3272,7 @@ bool P2PServer::P2PClient::on_monero_block_broadcast(const uint8_t* buf, uint32_
 
 	std::vector<uint8_t> blob;
 	blob.reserve(data.header_size + HASH_SIZE + 2);
-	
+
 	blob.insert(blob.end(), buf, buf + data.header_size);
 	blob.insert(blob.end(), root.h, root.h + HASH_SIZE);
 	writeVarint(num_transactions + 1, blob);

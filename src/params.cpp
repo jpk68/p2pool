@@ -246,6 +246,7 @@ Params::Params(const std::vector<std::vector<std::string>>& args)
 			if (s == "auto")  m_socks5ProxyType = ProxyType::AUTO;
 			if (s == "plain") m_socks5ProxyType = ProxyType::PLAIN;
 			if (s == "tor")   m_socks5ProxyType = ProxyType::TOR;
+			if (s == "i2p")   m_socks5ProxyType = ProxyType::I2P;
 
 			ok = m_socks5ProxyType != ProxyType::INVALID;
 		}
@@ -466,6 +467,10 @@ Params::Params(const std::vector<std::vector<std::string>>& args)
 				switch (port) {
 				case 9050:
 					m_socks5ProxyType = ProxyType::TOR;
+					break;
+
+				case 4447:
+					m_socks5ProxyType = ProxyType::I2P;
 					break;
 
 				default:
